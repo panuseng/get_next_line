@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seng <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: plaophit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:14:29 by seng              #+#    #+#             */
-/*   Updated: 2024/02/15 15:01:17 by seng             ###   ########.fr       */
+/*   Updated: 2024/02/18 17:05:41 by plaophit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,16 @@ char	*get_next_line(int fd)
 	line = ft_getline(buffer);
 	buffer = ft_tonext(buffer);
 	return (line);
+}
+
+int main()
+{
+	char *s;
+	char fd = open("/home/plaophit/Desktop/CG/get_next_line/repo/read_error.txt", O_RDONLY);
+	s = "1";
+	while(s)
+	{
+		s = get_next_line(fd);
+		printf("%s",s);
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seng <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: plaophit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/23 18:14:08 by nkiticha          #+#    #+#             */
-/*   Updated: 2024/02/15 15:04:02 by seng             ###   ########.fr       */
+/*   Created: 2024/02/07 18:23:46 by plaophit          #+#    #+#             */
+/*   Updated: 2024/02/18 14:56:42 by plaophit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ void	*ft_calloc(size_t count, size_t size)
 	void	*p;
 
 	p = (void *)malloc(count * size);
-	if (!p || count == SIZE_MAX || size == SIZE_MAX)
+	if (!p)
 		return (NULL);
 	ft_bzero(p, count * size);
 	return (p);
 }
 
-int	ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
 	int	i;
 

@@ -3,26 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seng <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: plaophit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/23 18:13:56 by nkiticha          #+#    #+#             */
-/*   Updated: 2024/02/09 20:31:19 by seng             ###   ########.fr       */
+/*   Created: 2024/02/07 18:23:42 by plaophit          #+#    #+#             */
+/*   Updated: 2024/02/18 16:55:51 by plaophit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
-# endif
 
+# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
 char	*get_next_line(int fd);
 char	*ft_strndup(const char *s1, int n);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlen(const char *s);
+void	*ft_calloc(size_t count, size_t size);
 
 #endif
