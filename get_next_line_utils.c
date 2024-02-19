@@ -6,33 +6,29 @@
 /*   By: plaophit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:23:46 by plaophit          #+#    #+#             */
-/*   Updated: 2024/02/19 12:17:26 by plaophit         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:57:07 by plaophit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	ft_bzero(void *b, size_t len)
-{
-	char	*str;
-
-	str = (char *)b;
-	while (len)
-	{
-		*str = '\0';
-		str++;
-		len--;
-	}
-}
-
 void	*ft_calloc(size_t count, size_t size)
 {
 	void	*p;
+	char	*str;
+	size_t	i;
 
+	i = count * size;
 	p = (void *)malloc(count * size);
 	if (!p)
 		return (NULL);
-	ft_bzero(p, count * size);
+	str = (char *)p;
+	while (i)
+	{
+		*str = '\0';
+		str++;
+		i--;
+	}
 	return (p);
 }
 
@@ -85,4 +81,13 @@ char	*ft_strchr(const char *str, int c)
 	if (*str == (char) c)
 		return ((char *)str);
 	return (0);
+}
+
+char	*ft_free(char *buffer, char *buf)
+{
+	char	*temp;
+
+	temp = ft_strjoin(buffer, buf);
+	free(buffer);
+	return (temp);
 }
