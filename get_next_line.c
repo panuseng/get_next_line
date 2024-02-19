@@ -6,7 +6,7 @@
 /*   By: plaophit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:14:29 by seng              #+#    #+#             */
-/*   Updated: 2024/02/18 17:05:41 by plaophit         ###   ########.fr       */
+/*   Updated: 2024/02/19 12:53:51 by plaophit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,17 @@ char	*ft_getline(char *buffer)
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	line = ft_calloc(i + 2, sizeof(char));
+	if (!line)
+		return (NULL);
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
 	{
 		line[i] = buffer[i];
 		i++;
 	}
-	if (buffer[i] && buffer[i] == '\n')
+	if (buffer[i] == '\n')
 		line[i++] = '\n';
+	line[i] = '\0';
 	return (line);
 }
 
@@ -38,7 +41,7 @@ char	*ft_tonext(char *buffer)
 {
 	int		i;
 	int		j;
-	char	*line;
+	char	*next;
 
 	i = 0;
 	j = 0;
@@ -49,16 +52,16 @@ char	*ft_tonext(char *buffer)
 		free(buffer);
 		return (NULL);
 	}
-	line = ft_calloc((ft_strlen(buffer) - j + 1), sizeof(char));
 	j++;
+	next = ft_calloc(ft_strlen(buffer) - j + 1, sizeof(char));
+	if (!next)
+		return (NULL);
 	while (buffer[j])
 	{
-		line[i] = buffer[j];
-		i++;
-		j++;
+		next[i++] = buffer[j++];
 	}
 	free(buffer);
-	return (line);
+	return (next);
 }
 
 char	*ft_free(char *buffer, char *buf)
@@ -76,15 +79,26 @@ char	*read_file(int fd, char *res)
 	int		byteread;
 
 	if (!res)
+	{
 		res = ft_calloc(1, 1);
+		if (!res)
+			return (NULL);
+	}
 	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	byteread = 1;
-	while (byteread > 0)
+	if (!buffer)
+	{
+		if (res)
+			free(res);
+		return (NULL);
+	}
+	byteread = BUFFER_SIZE;
+	while (byteread == BUFFER_SIZE)
 	{
 		byteread = read(fd, buffer, BUFFER_SIZE);
 		if (byteread == -1)
 		{
 			free(buffer);
+			free(res);
 			return (NULL);
 		}
 		buffer[byteread] = 0;
@@ -101,24 +115,30 @@ char	*get_next_line(int fd)
 	static char	*buffer;
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = read_file(fd, buffer);
 	if (!buffer)
-		return (NULL);
+		buffer = ft_calloc(1, 1);
 	line = ft_getline(buffer);
 	buffer = ft_tonext(buffer);
 	return (line);
 }
 
-int main()
-{
-	char *s;
-	char fd = open("/home/plaophit/Desktop/CG/get_next_line/repo/read_error.txt", O_RDONLY);
-	s = "1";
-	while(s)
-	{
-		s = get_next_line(fd);
-		printf("%s",s);
-	}
-}
+// int	main()
+// {
+//     int fd = open("emptry.txt", O_RDONLY); // Ensure the file name is correct
+//     if (fd == -1) {
+//         // Handle error
+//         return 1;
+//     }
+
+//     char *line;
+//     while ((line = get_next_line(fd)) != NULL) {
+//         printf("%s", line);
+//         free(line); // Free each line after use
+//     }
+
+//     close(fd); // Don't forget to close the file descriptor
+//     return 0;
+// }
