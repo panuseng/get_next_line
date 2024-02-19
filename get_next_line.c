@@ -6,7 +6,7 @@
 /*   By: plaophit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:14:29 by seng              #+#    #+#             */
-/*   Updated: 2024/02/19 12:53:51 by plaophit         ###   ########.fr       */
+/*   Updated: 2024/02/19 16:05:49 by plaophit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ char	*ft_getline(char *buffer)
 		i++;
 	line = ft_calloc(i + 2, sizeof(char));
 	if (!line)
+	{
+		free(buffer);
 		return (NULL);
+	}
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
 	{
@@ -33,7 +36,6 @@ char	*ft_getline(char *buffer)
 	}
 	if (buffer[i] == '\n')
 		line[i++] = '\n';
-	line[i] = '\0';
 	return (line);
 }
 
@@ -44,22 +46,23 @@ char	*ft_tonext(char *buffer)
 	char	*next;
 
 	i = 0;
-	j = 0;
-	while (buffer[j] && buffer[j] != '\n')
-		j++;
-	if (!buffer[j])
+	while (buffer[i] && buffer[i] != '\n')
+		i++;
+	if (!buffer[i])
 	{
 		free(buffer);
 		return (NULL);
 	}
-	j++;
-	next = ft_calloc(ft_strlen(buffer) - j + 1, sizeof(char));
+	next = ft_calloc(ft_strlen(buffer) - i + 1, sizeof(char));
 	if (!next)
-		return (NULL);
-	while (buffer[j])
 	{
-		next[i++] = buffer[j++];
+		free(buffer);
+		return (NULL);
 	}
+	i++;
+	j = 0;
+	while (buffer[i])
+		next[j++] = buffer[i++];
 	free(buffer);
 	return (next);
 }
@@ -79,20 +82,15 @@ char	*read_file(int fd, char *res)
 	int		byteread;
 
 	if (!res)
-	{
 		res = ft_calloc(1, 1);
-		if (!res)
-			return (NULL);
-	}
 	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!buffer)
 	{
-		if (res)
-			free(res);
+		free(buffer);
 		return (NULL);
 	}
-	byteread = BUFFER_SIZE;
-	while (byteread == BUFFER_SIZE)
+	byteread = 1;
+	while (byteread > 0)
 	{
 		byteread = read(fd, buffer, BUFFER_SIZE);
 		if (byteread == -1)
@@ -116,10 +114,17 @@ char	*get_next_line(int fd)
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
+	{
+		if (buffer)
+		{
+			free(buffer);
+			buffer = NULL;
+		}
 		return (NULL);
+	}
 	buffer = read_file(fd, buffer);
 	if (!buffer)
-		buffer = ft_calloc(1, 1);
+		return (NULL);
 	line = ft_getline(buffer);
 	buffer = ft_tonext(buffer);
 	return (line);
@@ -127,7 +132,7 @@ char	*get_next_line(int fd)
 
 // int	main()
 // {
-//     int fd = open("emptry.txt", O_RDONLY); // Ensure the file name is correct
+//     int fd = open("/home/plaophit/Desktop/GNL_seng/1ca", O_RDONLY); // Ensure the file name is correct
 //     if (fd == -1) {
 //         // Handle error
 //         return 1;
@@ -142,3 +147,4 @@ char	*get_next_line(int fd)
 //     close(fd); // Don't forget to close the file descriptor
 //     return 0;
 // }
+
